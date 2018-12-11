@@ -1,0 +1,4 @@
+cd tools/
+ln -s /usr/local/arm-2010q1 .
+source ACTIVATE.sh
+echo $MCU
