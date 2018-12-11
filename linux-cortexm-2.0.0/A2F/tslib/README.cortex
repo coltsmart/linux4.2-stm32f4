@@ -1,0 +1,7 @@
+# have you ran autogen.sh? Do so.
+./configure --bindir=/usr/bin --includedir=/usr/include --libdir=/usr/lib --sysconfdir=/etc --host=arm-uclinuxeabi --build=i386-linux --enable-linear-h2200=no --enable-ucb1x00=no --enable-cy8mrln-palmpre=no --enable-corgi=no --enable-collie=no --enable-h3600=no --enable-mk712=no --enable-arctic2=no --enable-tatung=no --enable-dmc=no --enable-input=static --enable-pthres=static --enable-variance=static --enable-dejitter=static --enable-linear=static --enable-touchkit=no --enable-static --disable-shared CFLAGS="-mcpu=cortex-m3 -mthumb -Os -Wall" LDFLAGS="-mcpu=cortex-m3 -mthumb"
+# For ts_calibrate, put etc/ts.conf to the target fs /etc.
+# For ts_calibrate, the touchscreen driver must support the ABS_PRESSURE event.
+# for the current Qt configuraton it results in the "unknown event" messages 
+# from the Qt core. You can use a special configuration of kernel, with 
+# PRESSURE_EVENT enabled in crtouch_mt.c driver for the calibration only.

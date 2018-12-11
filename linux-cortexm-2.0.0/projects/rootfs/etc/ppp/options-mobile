@@ -1,0 +1,20 @@
+ttyACM0
+115200
+lock
+crtscts
+modem
+passive
+novj
+defaultroute
+noipdefault
+usepeerdns
+noauth
+hide-password
+persist
+holdoff 10
+maxfail 0
+debug
+
+## Uncomment these for debugging.
+dump
+logfile /dev/console

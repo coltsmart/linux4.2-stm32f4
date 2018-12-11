@@ -1,0 +1,11 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+ 
+Name: ObexFTP
+Description: OBEX file transfer library
+Version: 0.23
+Requires: openobex bluez libusb
+Libs: -L${libdir} -lobexftp -lmulticobex -lbfb
+Cflags: -I${includedir}

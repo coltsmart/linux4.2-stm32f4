@@ -1,0 +1,2 @@
+# APN for Megafon Moscow
+AT+CGDCONT=1,"IP","public.msk"

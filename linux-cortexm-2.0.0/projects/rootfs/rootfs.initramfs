@@ -1,0 +1,200 @@
+# Device nodes
+dir /dev 0755 0 0
+nod /dev/console 0600 0 0 c 5 1
+
+# Various system directories
+dir /root 0700 0 0
+dir /proc 0755 0 0
+dir /sys 0755 0 0
+dir /etc 0755 0 0
+dir /var 0755 0 0
+dir /var/config 0755 0 0
+dir /var/tmp 0755 0 0
+dir /var/log 0755 0 0
+dir /var/run 0755 0 0
+dir /var/lock 0755 0 0
+dir /lib 777 0 0
+dir /lib/firmware 777 0 0
+dir /bin 755 0 0
+dir /sbin 755 0 0
+dir /usr 755 0 0
+dir /usr/bin 755 0 0
+dir /usr/sbin 755 0 0
+dir /usr/share 755 0 0
+dir /usr/libexec 755 0 0
+dir /mnt 777 0 0
+dir /mnt1 777 0 0
+dir /mnt2 777 0 0
+dir /mnt3 777 0 0
+dir /mnt4 777 0 0
+dir /tmp 777 0 0
+
+# busybox multi-tool utility
+# Note that largely symlinks to configured applets are created
+# at run-time on the target however the few symlinks below are
+# needed for the system to boot up and run the init scripts
+file /bin/busybox ${INSTALL_ROOT}/A2F/busybox/busybox 755 0 0
+slink /bin/init busybox 777 0 0
+slink /init /bin/init 777 0 0
+slink /bin/mount busybox 777 0 0
+slink /bin/sh busybox 777 0 0
+
+# Various system configuration files
+file /etc/inittab ${INSTALL_ROOT}/projects/${SAMPLE}/etc/inittab 755 0 0
+file /etc/fstab ${INSTALL_ROOT}/projects/${SAMPLE}/etc/fstab 755 0 0
+file /etc/rc ${INSTALL_ROOT}/projects/${SAMPLE}/etc/rc 755 0 0
+file /etc/hosts ${INSTALL_ROOT}/projects/${SAMPLE}/etc/hosts 644 0 0
+file /etc/services ${INSTALL_ROOT}/projects/${SAMPLE}/etc/services 644 0 0
+file /etc/protocols ${INSTALL_ROOT}/projects/${SAMPLE}/etc/protocols 644 0 0
+file /etc/passwd ${INSTALL_ROOT}/projects/${SAMPLE}/etc/passwd 644 0 0
+file /etc/group ${INSTALL_ROOT}/projects/${SAMPLE}/etc/group 644 0 0
+file /etc/shadow ${INSTALL_ROOT}/projects/${SAMPLE}/etc/shadow 644 0 0
+file /etc/securetty ${INSTALL_ROOT}/projects/${SAMPLE}/etc/securetty 644 0 0
+file /etc/profile ${INSTALL_ROOT}/projects/${SAMPLE}/etc/profile 644 0 0
+file /etc/resolv.conf \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/resolv.conf 644 0 0
+
+# U-boot environment management tools
+file /bin/fw_printenv ${INSTALL_ROOT}/u-boot/tools/env/fw_printenv 755 0 0
+slink /bin/fw_setenv fw_printenv 755 0 0
+file /etc/fw_env.config \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/fw_env.config 644 0 0
+
+# dropbear ssh server and client
+dir /etc/dropbear 0755 0 0
+file /etc/dropbear/dropbear_dss_host_key \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ssh_host_dss_key 644 0 0
+file /usr/bin/dropbearmulti \
+ ${INSTALL_ROOT}/A2F/root/usr/bin/dropbearmulti 755 0 0
+slink /usr/sbin/dropbear /usr/bin/dropbearmulti 755 0 0
+slink /usr/bin/dbclient dropbearmulti 755 0 0
+slink /usr/bin/ssh dbclient 755 0 0
+slink /usr/bin/scp dropbearmulti 755 0 0
+
+# SFTP server
+file /usr/libexec/sftp-server \
+ ${INSTALL_ROOT}/A2F/root/usr/libexec/sftp-server 755 0 0
+
+# net-snmp project
+# file /usr/bin/snmpget ${INSTALL_ROOT}/A2F/root/usr/bin/snmpget 755 0 0
+# file /usr/bin/snmptrap ${INSTALL_ROOT}/A2F/root/usr/bin/snmptrap 755 0 0
+
+# Web server and demo
+dir /httpd 0700 0 0
+dir /httpd/html 0700 0 0
+slink /httpd/html/cgi-bin /httpd/html 700 0 0
+file /httpd/html/mydemo.cgi \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/html/mydemo.cgi 700 0 0
+file /httpd/html/index.html \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/html/index.html 600 0 0
+file /httpd/html/styles.css \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/html/styles.css 600 0 0
+file /httpd/html/test-2.htm \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/html/test-2.htm 600 0 0
+file /httpd/html/pi.a \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/html/pi.a 600 0 0
+file /httpd/html/pi.b \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/html/pi.b 600 0 0
+file /httpd/html/pi.c \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/html/pi.c 600 0 0
+file /httpd/html/pi.d \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/html/pi.d 600 0 0
+file /httpd/html/file.name \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/html/file.name 600 0 0
+
+# DHCP configuration
+dir /usr/share/udhcpc 755 0 0
+file /usr/share/udhcpc/default.script \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/dhcp/default.script 755 0 0
+#file /etc/udhcpd.conf \
+# ${INSTALL_ROOT}/projects/${SAMPLE}/etc/udhcpd.conf 644 0 0
+#file /var/tmp/udhcpd.leases \
+# ${INSTALL_ROOT}/projects/${SAMPLE}/etc/udhcpd.leases 644 0 0
+
+# PPP
+dir /var/run/ppp 0755 0 0
+dir /etc/ppp 755 0 0
+dir /etc/ppp/peers 755 0 0
+dir /etc/ppp/ip-up.d 755 0 0
+dir /etc/ppp/ip-down.d 755 0 0
+dir /etc/ppp/chatscripts 755 0 0
+
+file /usr/sbin/pppd ${INSTALL_ROOT}/A2F/root/usr/sbin/pppd 755 0 0
+file /usr/sbin/chat ${INSTALL_ROOT}/A2F/root/usr/sbin/chat 755 0 0
+file /usr/bin/pon ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ppp/pon 755 0 0
+file /usr/bin/poff ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ppp/poff 755 0 0
+file /etc/ppp/options-mobile \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ppp/options-mobile 644 0 0
+file /etc/ppp/peers/provider \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ppp/peers/provider 644 0 0
+file /etc/ppp/ip-up \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ppp/ip-up 755 0 0
+file /etc/ppp/ip-down \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ppp/ip-down 755 0 0
+file /etc/ppp/ip-up.d/08setupdns \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ppp/ip-up.d/08setupdns 755 0 0
+file /etc/ppp/ip-down.d/92removedns \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ppp/ip-down.d/92removedns \
+ 755 0 0
+file /etc/ppp/chatscripts/apn \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ppp/chatscripts/apn 644 0 0
+file /etc/ppp/chatscripts/mobile-modem.chat \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ppp/chatscripts/mobile-modem.chat \
+ 644 0 0
+file /etc/ppp/chatscripts/mode \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ppp/chatscripts/mode 644 0 0
+file /etc/ppp/chatscripts/pin \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/ppp/chatscripts/pin 644 0 0
+
+# I2C test and management tools
+# If you don't need I2C in your application, comment out the lines
+# below in order to reduce the size of the root filesystem
+file /usr/sbin/i2cdump ${INSTALL_ROOT}/A2F/root/usr/sbin/i2cdump 755 0 0
+file /usr/sbin/i2cdetect ${INSTALL_ROOT}/A2F/root/usr/sbin/i2cdetect 755 0 0
+file /usr/sbin/i2cset ${INSTALL_ROOT}/A2F/root/usr/sbin/i2cset 755 0 0
+file /usr/sbin/i2cget ${INSTALL_ROOT}/A2F/root/usr/sbin/i2cget 755 0 0
+
+# Bluetooth files and tools
+dir /etc/bluetooth 777 0 0
+
+file /usr/sbin/hcid ${INSTALL_ROOT}/A2F/root/usr/local/sbin/hcid 777 0 0
+file /usr/sbin/sdpd ${INSTALL_ROOT}/A2F/root/usr/local/sbin/sdpd 777 0 0
+
+file /usr/bin/obexftp ${INSTALL_ROOT}/A2F/root/usr/local/bin/obexftp 777 0 0
+file /usr/bin/obexftpd ${INSTALL_ROOT}/A2F/root/usr/local/bin/obexftpd 777 0 0
+file /usr/bin/rfcomm ${INSTALL_ROOT}/A2F/root/usr/local/bin/rfcomm 777 0 0
+file /usr/bin/sdptool ${INSTALL_ROOT}/A2F/root/usr/local/bin/sdptool 777 0 0
+
+file /etc/bluetooth/hcid.conf \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/bluetooth/hcid.conf 644 0 0
+file /etc/bluetooth/rfcomm.conf \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/bluetooth/rfcomm.conf 644 0 0
+file /etc/bluetooth/pin \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/bluetooth/pin 644 0 0
+file /usr/bin/bluepin \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/bluetooth/bluepin 755 0 0
+file /usr/bin/connect.sh \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/bluetooth/connect.sh 755 0 0
+
+dir /lib/firmware/brcm 777 0 0
+file /lib/firmware/brcm/BCM20702A1-0a5c-21e8.hcd \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/firmware/brcm/BCM20702A1-0a5c-21e8.hcd \
+ 755 0 0
+
+# WiFi
+file /usr/sbin/wpa_supplicant \
+ ${INSTALL_ROOT}/A2F/root/usr/sbin/wpa_supplicant 755 0 0
+file /usr/sbin/wpa_cli ${INSTALL_ROOT}/A2F/root/usr/sbin/wpa_cli 755 0 0
+file /etc/wpa_supplicant.conf \
+ ${INSTALL_ROOT}/projects/${SAMPLE}/etc/wpa_supplicant.conf 600 0 0
+#file /bin/hostapd ${INSTALL_ROOT}/A2F/root/usr/bin/hostapd 755 0 0
+#file /etc/hostapd-minimal.conf \
+# ${INSTALL_ROOT}/projects/${SAMPLE}/etc/hostapd-minimal.conf 644 0 0
+#file start_ap ${INSTALL_ROOT}/projects/${SAMPLE}/etc/start_ap 755 0 0
+
+# GDB server.
+# Note that it is needed only if you want to debug applications on the target
+# from the cross-GDB on the development host. If you do not anticipate
+# the need to do so on production units in the field, comment out the line
+# below to reduce the footprint of the target root file system.
+file /usr/bin/gdbserver ${INSTALL_ROOT}/A2F/root/usr/bin/gdbserver 755 0 0

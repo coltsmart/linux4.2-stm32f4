@@ -1,0 +1,4 @@
+To build:
+1) src ACTIVATE.sh
+2) ac_cv_func_setpgrp_void=yes LDFLAGS="-mthumb -mcpu=cortex-m3  -L${INSTALL_ROOT}/A2F/root/usr/lib" CFLAGS="-mthumb -mcpu=cortex-m3 -Os -I${INSTALL_ROOT}/A2F/root/usr/include" ../configure --build=i386-linux --host=arm-uclinuxeabi --prefix=/usr
+3) make

@@ -1,0 +1,60 @@
+'\" -*- coding: us-ascii -*-
+.if \n(.g .ds T< \\FC
+.if \n(.g .ds T> \\F[\n[.fam]]
+.de URL
+\\$2 \(la\\$1\(ra\\$3
+..
+.if \n(.g .mso www.tmac
+.TH obexftpd 1 "17 February 2009" "" ""
+.SH NAME
+obexftpd \- Mobile Equipment file transfer server
+.SH SYNOPSIS
+\fBobexftpd\fR [\fIOPTIONS\fR] [\fITRANSPORT\fR]
+.SH DESCRIPTION
+With \fBobexftpd\fR you can set up an obex server on any
+computers using \fBIrDA\fR, \fBBluetooth\fR or \fBTCP/IP\fR.
+Use e.g. \fBobexftp\fR or the \fBObexFS\fR to access the files on this server.
+.SH OPTIONS
+The ordering of options is important. The first transport option will
+start the server. Use basedir and verbose options prior to any transport.
+See \fBEXAMPLES\fR
+.SS "TRANSPORT OPTIONS"
+.TP 
+\fB-i\fR, \fB--irda\fR 
+Acceopt connections using the IrDA protocol.
+.TP 
+\fB-b\fR, \fB--bluetooth\fR 
+Accept connections via bluetooth.
+.TP 
+\fB-t\fR \fIdevice\fR, \fB--tty\fR \fIdevice\fR 
+Accept connections from this tty device. NOT WORKING!
+.TP 
+\fB-n\fR \fIhost\fR, \fB--network\fR \fIhost\fR 
+Accept connections from the network to this port.
+.SS "SETTING THE FILE PATH"
+.TP 
+\fB-c\fR \fIfolder\fR, \fB--chdir\fR \fIfolder\fR 
+Set the base directory for the server.
+.SS "VERSION INFORMATION AND HELP"
+.TP 
+\fB-v\fR, \fB--verbose\fR 
+Be verbose and give some additional infos.
+.TP 
+\fB-V\fR, \fB--version\fR 
+Print version string and exit.
+.TP 
+\fB-h\fR, \fB--help\fR, \fB--usage\fR 
+Print short usage instructions.
+.SH EXAMPLES
+.TP 
+Start listening for bluetooth connections and use a safe basedir: 
+\fBobexftpd -c /tmp/inbox -b\fR
+.SH "SEE ALSO"
+obexftp(1), openobex(3), obexftp(3), multicobex(3), libbfb(3).
+.SH BUGS
+Bugs ? Features !
+.SH NOTES
+The software has been tested and reported working on at least Siemens, Ericsson, and Nokia phones.
+.SH AUTHOR
+Christian W. Zuckschwerdt <zany@triq.net>
+Alan Zhang <vibra@tom.com>

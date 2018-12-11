@@ -1,0 +1,4 @@
+file /etc/ppp/options-mobile
+connect "/usr/sbin/chat -v -t15 -f /etc/ppp/chatscripts/verizon.chat"
+# user xxx
+# password yyy

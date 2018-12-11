@@ -1,0 +1,4 @@
+To build for Cortex-M3:
+CC=arm-uclinuxeabi-gcc LDFLAGS="-mthumb -mcpu=cortex-m3 -L${INSTALL_ROOT}/A2F/root/usr/lib" CFLAGS="-mthumb -mcpu=cortex-m3 -Os -I${INSTALL_ROOT}/A2F/root/usr/include" ./configure --prefix=/usr
+make
+make install DESTDIR=${INSTALL_ROOT}/A2F/root

@@ -1,0 +1,6 @@
+To build for Cortex-M:
+LDFLAGS="-mthumb -mcpu=cortex-m3 -L${INSTALL_ROOT}/A2F/root/usr/lib" CFLAGS="-mthumb -mcpu=cortex-m3 -Os -I${INSTALL_ROOT}/A2F/root/usr/include" ./configure --build=i386-linux --host=arm-uclinuxeabi  --prefix=/usr
+make sftp-server
+arm-uclinuxeabi-flthdr -s 16384 sftp-server
+
+On the target, to work with dropbear, put sftp-server to /usr/libexec/

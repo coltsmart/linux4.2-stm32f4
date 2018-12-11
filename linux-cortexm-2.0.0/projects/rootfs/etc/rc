@@ -1,0 +1,9 @@
+#!/bin/sh
+
+busybox --install -s
+
+mount -a
+mkdir -p /dev/pts
+mount -t devpts devpts /dev/pts -ogid=5,mode=620
+
+#mount -o nolock,rsize=1024 172.17.0.1:/home/vlad/test /mnt

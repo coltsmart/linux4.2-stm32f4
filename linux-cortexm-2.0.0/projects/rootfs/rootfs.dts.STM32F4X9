@@ -1,0 +1,282 @@
+/*
+ * Copyright 2015-2016
+ * Yuri Tikhonov, Emcraft Systems, <yur@emcraft.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * publishhed by the Free Software Foundation.
+ */
+
+/dts-v1/;
+#include "stm32f429-som.dts"
+#include "dt-bindings/gpio/gpio.h"
+
+/ {
+	chosen {
+		bootargs = "console=ttyS0,115200";
+		linux,stdout-path = &usart1;
+	};
+
+	nor_flash {
+		status = "okay";
+
+		flash_uboot_env@0x0 {
+			label = "flash_uboot_env";
+			reg = <0x00000 0x20000>;
+		};
+
+		flash_linux_image@0x20000 {
+			label = "flash_linux_image";
+			reg = <0x20000 0xa00000>;
+		};
+
+
+		flash_jffs2@0xa20000 {
+			label = "flash_jffs2";
+			reg = <0xa20000 0x5e0000>;
+		};
+	};
+
+	/*
+	 * Specify GPIOs parameters (push-pull/open-drain, pull-up/down,
+	 * etc.) here
+	 */
+	pin-controller {
+		gpio {
+			pinctrl_inputs: ins {
+				st,pins {
+					S2.but = <&gpioe 2 IN PULL_UP
+						  PUSH_PULL LOW_SPEED>;
+					P10.11 = <&gpiod 7 IN PULL_DOWN
+						  PUSH_PULL LOW_SPEED>;
+				};
+			};
+
+			pinctrl_outputs: outs {
+				st,pins {
+					DS4.led = <&gpiob 2 OUT NO_PULL
+						   PUSH_PULL LOW_SPEED>;
+					P10.20 = <&gpioc 6 OUT NO_PULL
+						  OPEN_DRAIN LOW_SPEED>;
+				};
+			};
+		};
+	};
+
+	inputs {
+		compatible = "gpio-keys-polled";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_inputs>;
+		poll-interval = <100>;
+
+		input@1 {
+			label = "S2";
+			gpios = <&gpioe 2 GPIO_ACTIVE_HIGH>;
+			linux,code = <0x41>;
+		};
+		input@2 {
+			label = "P10.11";
+			gpios = <&gpiod 7 GPIO_ACTIVE_HIGH>;
+			linux,code = <0x42>;
+		};
+	};
+
+	outputs {
+		compatible = "gpio-leds";
+		pinctrl-naems = "default";
+		pinctrl-0 = <&pinctrl_outputs>;
+
+		output@1 {
+			label = "DS4";
+			gpios = <&gpiob 2 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+		output@2 {
+			label = "P10.20";
+			gpios = <&gpioc 6 GPIO_ACTIVE_LOW>;
+			default-state = "off";
+		};
+	};
+};
+
+/*
+ * Real time clock
+ */
+&rtc {
+	status = "okay";
+};
+
+/*
+ * Enable DMAs which are used for xfer with some peripheral
+ */
+&dma1 {
+	status = "okay";
+};
+&dma2 {
+	status = "okay";
+};
+
+/*
+ * UART interfaces
+ */
+&usart1 {
+	status = "okay";
+	st,use-dma-rx;
+	st,use-dma-tx;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_usart1>;
+};
+&usart7 {
+	status = "okay";
+	st,use-dma-rx;
+	st,use-dma-tx;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_usart7>;
+};
+
+/*
+ * Ethernet controller
+ */
+&mac {
+	status = "okay";
+	phy-mode = "rmii";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_mac_rmii>;
+};
+
+/*
+ * USB interfaces.
+ * Select the role of the appropriate interface by specifying
+ * 'host'/'peripheral' value in 'dr_mode' property
+ */
+&usb_hs {
+	status = "okay";
+	dr_mode = "host";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_usb_hs>;
+	usb2-phy = <&usb_phy_hs>;
+	g-gpio = <0x210000>;
+
+	/*
+	 * g-xxx properties are sizes in words.
+	 * Overall FIFO size is 4048 bytes (1012 words).
+	 * High-speed maximum packet sizes:
+	 * - CTL (64), BLK (512), INT (1024), ISO (1024)
+	 *
+	 * High-speed ACM Serial gadget configuration:
+	 * - CTL IN/OUT (64), BLK IN/OUT (512), INT IN (10)
+	 * - so FIFO distribution may be optimized for ACM gadget:
+	 *	g-rx-fifo-size = <512>;
+	 *	g-np-tx-fifo-size = <64>;
+	 *	g-tx-fifo-size = <52 384>;
+	 *
+	 * High-speed Mass-Storage gadget configuration:
+	 * - CTL IN/OUT (64), BLK IN/OUT (512)
+	 * - so FIFO distribution may be optimized for Mass-Storage gadget:
+	 *	g-rx-fifo-size = <564>;
+	 *	g-np-tx-fifo-size = <64>;
+	 *	g-tx-fifo-size = <384>;
+	 */
+	g-rx-fifo-size = <512>;
+	g-np-tx-fifo-size = <64>;
+	g-tx-fifo-size = <52 384>;
+};
+&usb_fs {
+	status = "disabled";
+	dr_mode = "host";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_usb_fs>;
+	usb2-phy = <&usb_phy_fs>;
+	g-gpio = <0x210000>;
+
+	/*
+	 * g-xxx properties are sizes in words.
+	 * Overall FIFO size is 1280 bytes (320 words).
+	 * Full-speed maximum packet sizes:
+	 * - CTL (64), BLK (64), INT (64), ISO (1023)
+	 *
+	 * Full-speed ACM Serial gadget configuration:
+	 * - CTL IN/OUT (64), BLK IN/OUT (64), INT IN (10)
+	 * - so FIFO distribution may be optimized for ACM gadget:
+	 *	g-rx-fifo-size = <160>;
+	 *	g-np-tx-fifo-size = <64>;
+	 *	g-tx-fifo-size = <32 64>;
+	 *
+	 * Full-speed Mass-Storage gadget configuration:
+	 * - CTL IN/OUT (64), BLK IN/OUT (64)
+	 * - so FIFO distribution may be optimized for Mass-Storage gadget:
+	 *	g-rx-fifo-size = <160>;
+	 *	g-np-tx-fifo-size = <64>;
+	 *	g-tx-fifo-size = <96>;
+	 */
+	g-rx-fifo-size = <160>;
+	g-np-tx-fifo-size = <64>;
+	g-tx-fifo-size = <32 64>;
+};
+
+/*
+ * I2C interfaces
+ */
+&i2c_1 {
+	status = "okay";
+	st,i2c-clk = <100000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_i2c_1>;
+};
+
+/*
+ * SPI support is present in example below in two variants:
+ * - m25p80 SPI Flash chip as MTD device
+ * - some SPI chip on SPI bus (default)
+ * Set the appropriate (okay/disable) 'status' in the nodes
+ * below. Please note, that you can't enable both.
+ */
+&spi_2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_spi_2>;
+	cs-gpios = <&gpiob 9 OUT>;
+	timeouts = <3>;
+
+	/*
+	 * Choice: work with m25p80 as with MTD Flash chip
+	 */
+	flash: m25p32@2 {
+		status = "disabled";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "m25p32";
+		spi-max-frequency = <25000000>;
+		reg = <0>;
+
+		partition@0 {
+			label = "spi_flash_part0";
+			reg = <0x0 0x100000>;
+		};
+
+		parition@1 {
+			label = "spi_flash_part1";
+			reg = <0x100000 0x300000>;
+		};
+	};
+
+	/*
+	 * Choice: work with m25p80 as with a "raw" SPI chip using SPIDEV
+	 */
+	spidev: spidev@2 {
+		status = "okay";
+		compatible = "linux,spidev";
+		spi-max-frequency = <25000000>;
+		reg = <0>;
+	};
+};
+
+/*
+ * SD/MMC interface
+ */
+&sdio {
+	status = "disabled";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_sdio>;
+	cd-gpio = <&gpioi 3 GPIO_ACTIVE_LOW>;
+};

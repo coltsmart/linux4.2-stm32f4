@@ -1,0 +1,149 @@
+'\" -*- coding: us-ascii -*-
+.if \n(.g .ds T< \\FC
+.if \n(.g .ds T> \\F[\n[.fam]]
+.de URL
+\\$2 \(la\\$1\(ra\\$3
+..
+.if \n(.g .mso www.tmac
+.TH obexftp 1 "17 February 2009" "" ""
+.SH NAME
+obexftp \- Mobile Equipment file transfer tool
+.SH SYNOPSIS
+\fBobexftp\fR [\fIOPTION\fR] [\fICOMMANDS\fR]
+.SH DESCRIPTION
+\fBobexftp\fR is used to access files on mobile equipment,
+i.e. cell phones. With \fBobexftpd\fR you can transfer files between any
+computers using \fBIrDA\fR, \fBBluetooth\fR and \fBTCP/IP\fR.
+.PP
+This tool lets you access the \fBObexFTP\fR library by the means of
+a command line interface.
+You might consider using the other means available.
+E.g. the \fBObexFS\fR filesystem for Linux.
+.SH OPTIONS
+The ordering of options is important. Every command will use the most
+recent device set. Every file without command switch will apply to the
+command given most recent. See \fBEXAMPLES\fR
+.SS "TRANSPORT OPTIONS"
+.TP 
+\fB-i\fR, \fB--irda\fR 
+Connect using the IrDA protocol. This is the default.
+.TP 
+\fB-b\fR \fIdevice\fR, \fB--bluetooth\fR \fIdevice\fR 
+Connect to this bluetooth device. If the device is not given the first
+device found will be used.
+.TP 
+\fB-B\fR \fInumber\fR, \fB--channel\fR \fInumber\fR 
+Use this bluetooth channel when connecting.
+The channel will be discoverd automatically if this option is not used.
+.TP 
+\fB-d\fR \fIno/address\fR, \fB--hci\fR \fIno/address\fR 
+Use the bluetooth device referenced by number or address as
+source device for the connection.
+.TP 
+\fB-u\fR \fIintf no\fR, \fB--usb\fR \fIintf no\fR 
+Connect to this usb interface or list all available usb interfaces.
+.TP 
+\fB-t\fR \fIdevice\fR, \fB--tty\fR \fIdevice\fR 
+Connect to this tty device.
+.TP 
+\fB-n\fR \fIhost\fR, \fB--network\fR \fIhost\fR 
+Connect to this network host.
+.SS "COMPATIBILITY OPTIONS"
+.TP 
+\fB-U\fR \fIuuid\fR, \fB--uuid\fR \fIuuid\fR 
+Select the UUID to connect with. Recognized values are currently
+"none" needed by some Nokia mobile devices,
+"FBS" (default) for the normal file browsing service,
+"IRMC" for IRMC synchronisation and
+"S45" when connecting to a Siemens Mobile phone via cable or
+"SHARP" for PCSOFTWARE UUID with Sharp devices.
+.TP 
+\fB-H\fR, \fB--noconn\fR 
+Suppress connection IDs (i.e. send no connection header to the mobile).
+.TP 
+\fB-S\fR, \fB--nopath\fR 
+Don't use "setpath" commands (i.e. send the whole path as filename to the
+mobile).
+Can be used together with \fB--noconn\fR and \fB--uuid none\fR to send an OBEX-PUSH.
+.SS "SETTING THE FILE PATH"
+.TP 
+\fB-c\fR \fIfolder\fR, \fB--chdir\fR \fIfolder\fR 
+Set the mobiles current working directory.
+.TP 
+\fB-C\fR \fIfolder\fR, \fB--mkdir\fR \fIfolder\fR 
+Set the mobiles current working directory.
+The folder will be created if it doesn't exist.
+.TP 
+\fB-l\fR \fIfolder\fR, \fB--list\fR \fIfolder\fR 
+List a folder.
+.SS "SENDING AND RETRIEVING FILES"
+.TP 
+\fB-o\fR \fIpath\fR, \fB--output\fR \fIpath\fR 
+Specify the target file name, overriding the implicit local name from \fB--get\fR
+or the implicit remote name from \fB--put\fR
+.TP 
+\fB-g\fR \fIsource\fR, \fB--get\fR \fIsource\fR 
+Retrieve files from mobile.
+.TP 
+\fB-G\fR \fIsource\fR, \fB--getdelete\fR \fIsource\fR 
+Retrieve files from mobile and delete them on the mobile
+.TP 
+\fB-p\fR \fIsource\fR, \fB--put\fR \fIsource\fR 
+Send files to the mobile.
+.TP 
+\fB-k\fR \fIsource\fR, \fB--delete\fR \fIsource\fR 
+Delete files from the mobile.
+.SS "EXPERIMENTAL EXTRAS"
+.TP 
+\fB-X\fR, \fB--capability\fR 
+Retrieve the capability object from the mobile (if available).
+.TP 
+\fB-Y\fR, \fB--probe\fR 
+Probe and report device characteristics
+.TP 
+\fB-x\fR, \fB--info\fR 
+Retrieve misc infos from mobile. I.e. memory size and free memory.
+Siemens specific for now.
+.TP 
+\fB-m\fR \fIsrc\fR \fIdest\fR, \fB--move\fR \fIsrc\fR \fIdest\fR 
+Move (rename) files on the mobile. Siemens specific for now.
+.SS "VERSION INFORMATION AND HELP"
+.TP 
+\fB-v\fR, \fB--verbose\fR 
+Be verbose and give some additional infos.
+.TP 
+\fB-V\fR, \fB--version\fR 
+Print version string and exit.
+.TP 
+\fB-h\fR, \fB--help\fR, \fB--usage\fR 
+Print short usage instructions.
+.SH EXAMPLES
+.TP 
+To get the directory listing from the first irda device 
+\fBobexftp -i -l\fR
+or just
+\fBobexftp -l\fR
+as IrDA is the default.
+.TP 
+To get the file bar from directory foo from the first bluetooth device 
+\fBobexftp -b -c foo -g bar\fR
+.TP 
+To send the file bar to directory foo with device on first serial port 
+\fBobexftp -t /dev/ttyS0 -c foo -p bar\fR
+.TP 
+It is possible to use RfComm (serial port over bluetooth) 
+\fBobexftp -t /dev/rfcomm0 -c foo -p bar\fR
+.TP 
+And also IrComm (serial port over IrDA) 
+\fBobexftp -t /dev/ircomm0 -c foo -p bar\fR
+.TP 
+To send the file bar using plain OBEX PUSH 
+\fBobexftp --bluetooth --nopath --noconn --uuid none --put bar\fR
+.SH "SEE ALSO"
+obexftpd(1), openobex(3), obexftp(3), multicobex(3), libbfb(3).
+.SH BUGS
+Bugs ? Features !
+.SH NOTES
+The software has been tested and reported working on at least Siemens, Ericsson, and Nokia phones.
+.SH AUTHOR
+Christian W. Zuckschwerdt <zany@triq.net>
